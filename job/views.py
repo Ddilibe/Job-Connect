@@ -124,7 +124,7 @@ def student_login(request):
         response=requests.post(f"{api_url.base_url}/login/",json=login_data)
 
         if response.json()['status']==True:
-            return redirect('landingpage')
+            return redirect('index')
 
         else:
             return redirect('studentsignup')
@@ -170,7 +170,7 @@ def job_list_post(request):
 
 def job_single(request, primary_key):
     if not (single := [i for i in jobs if i['pk'] == primary_key]):
-        return redirect('landingpage')
+        return redirect('index')
     single = single[0]
     return render(request, 'dashboard/student/detailed_saved_job.html', context={'job':single})
 
@@ -205,14 +205,14 @@ def student_dashboard(requests):
 
 def applied_job(requests, job_id):
     if not (single := [i for i in jobs if i['pk'] == job_id]):
-        return redirect('landingpage')
+        return redirect('index')
     single = single[0]
     content = {'job': single, "leav": "this is it"}
     return render(requests, "dashboard/student/applied_job.html", content)
 
 def detailed_saved_job(request, job_id):
     if not (single := [i for i in jobs if i['pk'] == job_id]):
-        return redirect('landingpage')
+        return redirect('index')
     single = single[0]
     return render(request, 'dashboard/student/detailed_saved_job.html', {"job": single})
 
@@ -233,7 +233,7 @@ def withdraw_application(request, job_id):
         return redirect('studentdashboard')
     elif request.method == "GET":
         if not (single := [i for i in jobs if i['pk'] == job_id]):
-            return redirect('landingpage')
+            return redirect('index')
         single = single[0]
         content = {'job': single}
         return render(request, "job/withdraw_application.html", content)
@@ -253,7 +253,7 @@ def company_dashboard(requests):
 def post_job(request, job_id=None):
     if job_id:
         if not (single := [i for i in jobs if i['pk'] == job_id]):
-            return redirect('landingpage')
+            return redirect('index')
         job = single[0]
         form_title = "Edit Job Post"
     else:
@@ -270,7 +270,7 @@ def post_job(request, job_id=None):
 
 def job_applications(request, job_id=None):
     # if not (single := [i for i in jobs if i['pk'] == job_id]):
-    #     return redirect('landingpage')
+    #     return redirect('index')
     # job = single[0]
     # context = {
     #     'job': job,

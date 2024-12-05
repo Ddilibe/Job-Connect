@@ -8,7 +8,7 @@ import job.views as job
 
 urlpatterns = [
     # path("student/", include(router.urls)),
-    path("", job.landing_page, name="landingpage"),
+    path("", job.landing_page, name="index"),
     path("about-us", job.about_us, name="aboutus"),
     path('contact-us', job.contact_us, name="contactus"),
     path("admin-login", job.admin_login, name="adminlogin"),
