@@ -12,5 +12,8 @@ drf-yasg
 gunicorn
 whitenoise
 Pillow
-requests
+request
 six
+cloudinary
+python-dotenv
+django-cloudinary-storage

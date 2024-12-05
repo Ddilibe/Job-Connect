@@ -16,7 +16,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     old_password=serializers.CharField(required=True)
     new_password=serializers.CharField(required=True)
 
-class ResetPasswordEmailRequestSerializer(serializers.ModelSerializer):
+class ResetPasswordEmailrequesterializer(serializers.ModelSerializer):
     email=serializers.EmailField(min_length=2)
 
     class Meta:

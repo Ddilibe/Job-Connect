@@ -1,4 +1,4 @@
-import requests
+import request
 
 url = "http://localhost:2222/user/f81378df5c014d29828e41c4e64f7d48/"
 headers = {
@@ -9,7 +9,7 @@ data = {
     "username": "ekc"  # New username
 }
 
-response = requests.patch(url, json=data, headers=headers)
+response = request.patch(url, json=data, headers=headers)
 
 if response.status_code == 200:
     print("Update successful:", response.json())

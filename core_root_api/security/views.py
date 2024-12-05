@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render,redirect
-import requests
+import request
 from django.shortcuts import render
 from django.http import JsonResponse
 import base64
@@ -32,7 +32,7 @@ def login(request):
             main_url=base_url.main_url+"login/"
             # user = face_id.authenticate(username=email, password=password, face_id=face_image)
             # if user is not None:
-            singin_response=requests.post(main_url,json=signin_data)
+            singin_response=request.post(main_url,json=signin_data)
 
             if singin_response.status_code==200:
                     
@@ -73,7 +73,7 @@ def signup(request):
             "confirm_password":confirm_password
             }
             main_url=base_url.main_url+"register/"
-            singup_response=requests.post(main_url,json=signup_data)
+            singup_response=request.post(main_url,json=signup_data)
 
             if singup_response.status_code==201:
                 singup_response=singup_response.json()

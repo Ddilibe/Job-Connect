@@ -124,8 +124,10 @@ def student_login(request):
         response=requests.post(f"{api_url.base_url}/login/",json=login_data)
 
         if response.json()['status']==True:
-            return redirect('index')
-
+            response_data=response.json()
+            request.session['access_token'] = response_data['data']['access']
+            request.session['user_id'] = response_data['data']['user']['id']
+            return redirect('joblistpost')
         else:
             return redirect('studentsignup')
     return render(request, "auth/student_login.html")
@@ -194,21 +196,21 @@ def admin_profile(request):
     START OF THE STUDENT PART
 """
 
-def student_dashboard(requests):
+def student_dashboard(request):
     context= {
         "applied_jobs": json.dumps(jobs),
         "recommended_jobs": json.dumps(jobs),
         "saved_jobs": json.dumps(jobs)
     }
-    return render(requests, "dashboard/student_dashboard.html", context)
+    return render(request, "dashboard/student_dashboard.html", context)
 
 
-def applied_job(requests, job_id):
+def applied_job(request, job_id):
     if not (single := [i for i in jobs if i['pk'] == job_id]):
         return redirect('index')
     single = single[0]
     content = {'job': single, "leav": "this is it"}
-    return render(requests, "dashboard/student/applied_job.html", content)
+    return render(request, "dashboard/student/applied_job.html", content)
 
 def detailed_saved_job(request, job_id):
     if not (single := [i for i in jobs if i['pk'] == job_id]):
@@ -220,12 +222,57 @@ def detailed_saved_job(request, job_id):
     Section for job application
 """
 
-def apply_job(requests, job_id):
-    return render(requests, "job/applied_job.html")
+def apply_job(request, job_id):
+    return render(request, "job/applied_job.html")
 
 
-def successful_submission(requests, job_id):
-    return render(requests, "job/successful_submission.html")
+def successful_submission(request, job_id):
+    
+    if request.method == 'POST':
+        access_token = request.session.get('access_token')
+        # print(access_token)
+        
+        # Retrieve form data
+        full_name = request.POST['full_name']
+        email = request.POST['email']
+        phone_number = request.POST['phone_number']
+        cover_letter = request.POST['cover_letter']
+        
+        # Access the uploaded resume file
+        resume = request.FILES['resume']
+        
+        # Prepare application data
+        application_data = {
+            'full_name': full_name,
+            'email': email,
+            'phone_number': phone_number,
+            'cover_letter': cover_letter,
+            # Note: 'resume' will be handled separately as a file upload
+        }
+        
+        headers = {"Authorization": f"Bearer {access_token}"}
+        
+        # Send application data along with the resume file
+        response = requests.post(
+            f"{api_url.base_url}/job/apply/",
+            data=application_data,  # Use 'data' for non-file fields
+            files={'resume': resume},  # Use 'files' for the resume upload
+            headers=headers
+        )
+        
+        print(response.json())
+        
+        if response.json().get('status') == True:
+            # print("good")
+            context=response.json()['data']
+            print(context)
+            return render(request, "job/successful_submission.html",context=context)
+        else:
+            
+            del request.session['access_token']  # Clear the session
+            return redirect('student_login')  # Redirect to login
+
+    return render(request, "job/successful_submission.html")
 
 def withdraw_application(request, job_id):
     
@@ -247,8 +294,8 @@ def withdraw_application(request, job_id):
 """
     START OF THE COMPANY ADMIN SECTION
 """
-def company_dashboard(requests):
-    return render(requests, "dashboard/company_dashboard.html", {'jobs':jobs})
+def company_dashboard(request):
+    return render(request, "dashboard/company_dashboard.html", {'jobs':jobs})
 
 def post_job(request, job_id=None):
     if job_id:

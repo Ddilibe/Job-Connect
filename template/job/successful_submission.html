@@ -46,10 +46,10 @@
                 <p>Your application has been successfully submitted, and our team will review it soon.</p>
                 <p><strong>Application Summary:</strong></p>
                 <ul>
-                    <strong>Full Name:</strong> {{ applicant.full_name }}<br>
-                    <strong>Email:</strong> {{ applicant.email }}<br>
-                    <strong>Phone:</strong> {{ applicant.phone }}<br>
-                    <strong>Cover Letter:</strong> {{ applicant.cover_letter|truncatewords:20 }}<br>
+                    <strong>Full Name:</strong>{{full_name}}<br>
+                    <strong>Email:</strong>{{email}}<br>
+                    <strong>Phone:</strong>{{phone_number}}<br>
+                    <strong>Cover Letter:</strong> {{cover_letter|truncatewords:20 }}<br>
                 </ul>
                 <a href="{% url 'studentdashboard' %}" class="btn btn-success">Return to Dashboard</a>
             </div>

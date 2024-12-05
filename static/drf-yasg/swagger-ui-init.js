@@ -173,7 +173,7 @@ function initSwaggerUiConfig(swaggerSettings, oauth2Settings) {
             }
         };
 
-        var specRequestsInFlight = {};
+        var specrequestInFlight = {};
         var oldRequestInterceptor = swaggerUiConfig.requestInterceptor;
         swaggerUiConfig.requestInterceptor = function (request) {
             var headers = request.headers || {};
@@ -197,10 +197,10 @@ function initSwaggerUiConfig(swaggerSettings, oauth2Settings) {
                         });
                     }
 
-                    // need to manually remember requests for spec urls because
+                    // need to manually remember request for spec urls because
                     // responseInterceptor has no reference to the request...
                     var absUrl = new URL(request.url, currentPath);
-                    specRequestsInFlight[absUrl.href] = request.url;
+                    specrequestInFlight[absUrl.href] = request.url;
                 }
             }
 
@@ -213,9 +213,9 @@ function initSwaggerUiConfig(swaggerSettings, oauth2Settings) {
         var oldResponseInterceptor = swaggerUiConfig.responseInterceptor;
         swaggerUiConfig.responseInterceptor = function (response) {
             var absUrl = new URL(response.url, currentPath);
-            if (absUrl.href in specRequestsInFlight) {
-                var setToUrl = specRequestsInFlight[absUrl.href];
-                delete specRequestsInFlight[absUrl.href];
+            if (absUrl.href in specrequestInFlight) {
+                var setToUrl = specrequestInFlight[absUrl.href];
+                delete specrequestInFlight[absUrl.href];
                 if (response.ok) {
                     // need setTimeout here because swagger-ui insists to call updateUrl
                     // with the initial request url after the response...

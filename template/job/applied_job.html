@@ -93,7 +93,9 @@
                 <h4>Application Form</h4>
                 <p>Please fill out the form below to apply for this job:</p>
 
-                <form method="POST" action="{% url 'submit-application' '1221' %}">
+                <!-- <form method="POST" action="{% url 'submit-application' '1221' %}"> -->
+                <form method="POST" action="{% url 'submit-application' '1221' %}" enctype="multipart/form-data">
+
                     {% csrf_token %}
                     
                     <!-- Full Name -->
@@ -108,10 +110,10 @@
                         <input type="email" id="email" name="email" class="form-control" required>
                     </div>
 
-                    <!-- Phone Number -->
+
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
-                        <input type="text" id="phone" name="phone" class="form-control" required>
+                        <input type="text" id="phone" name="phone_number" class="form-control" required>
                     </div>
 
                     <!-- Cover Letter -->

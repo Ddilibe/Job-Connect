@@ -26,7 +26,7 @@ class LoginSerializerClass(TokenObtainPairSerializer):
         refresh = self.get_token(self.user)
         access = refresh.access_token
 
-        access.set_exp(lifetime=timedelta(hours=100))  # Set access token expiry to 3 hours
+        # access.set_exp(lifetime=timedelta(hours=100))  # Set access token expiry to 3 hours
 
         data['user'] = UserSerializer(self.user).data
         data['refresh'] = str(refresh)
