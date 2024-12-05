@@ -173,7 +173,7 @@ SIMPLE_JWT = {
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL='media/'
-# MEDIA_ROOT=os.path.join(BASE_DIR,'media')
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ['CLOUD_NAME'],
     'API_KEY': os.environ['CLOUDINARY_API_KEY'],
