@@ -174,10 +174,13 @@ SIMPLE_JWT = {
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL='media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
+CLOUD_NAME="drlcmhrcg"
+CLOUDINARY_API_KEY="997498217494732"
+CLOUDINARY_API_SECRET="kNxzzNDDqvi2ppSHIpbWIU58_wA"
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ['CLOUD_NAME'],
-    'API_KEY': os.environ['CLOUDINARY_API_KEY'],
-    'API_SECRET': os.environ['CLOUDINARY_API_SECRET'],
+    'CLOUD_NAME': CLOUD_NAME,
+    'API_KEY': CLOUDINARY_API_KEY,
+    'API_SECRET': CLOUDINARY_API_SECRET,
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
