@@ -40,7 +40,7 @@ class LoginViewSet(viewsets.ModelViewSet):
             return Response({'error_msg':'User  with that email or password does not exist','status':False},status=status.HTTP_401_UNAUTHORIZED)    
 
         # return Response({"error_message":"Could not login, due to invalid credentials",'status':False}, status=status.HTTP_400_BAD_REQUEST)
-    from rest_framework.response import Response
+from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from rest_framework.permissions import AllowAny
 from rest_framework import status

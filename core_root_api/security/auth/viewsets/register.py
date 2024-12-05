@@ -9,7 +9,7 @@ import random
 import string
 from django.views import View
 from rest_framework.response import Response
-import resend
+# import resend
 from core_root_api.security.auth.utils import generate_token
 from django.utils.encoding import force_bytes,DjangoUnicodeDecodeError,force_str
 from rest_framework.viewsets import ViewSet
