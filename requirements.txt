@@ -12,5 +12,5 @@ drf-yasg
 gunicorn
 whitenoise
 Pillow
-requeests
+requests
 six
