@@ -12,7 +12,7 @@ drf-yasg
 gunicorn
 whitenoise
 Pillow
-request
+requests
 six
 cloudinary
 python-dotenv
