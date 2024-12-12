@@ -78,20 +78,20 @@
             <h1>{{ job.title }}</h1>
             <p><strong>Company:</strong> {{ job.company_name }}</p>
             <p><strong>Location:</strong> {{ job.place }}</p>
-            <p><strong>Posted:</strong> {{ job.app_date }}</p>
+            <p><strong>Posted:</strong> {{ job.application_starting_date }}</p>
         </div>
 
         <!-- Job Details -->
         <div class="card job-details-card">
             <div class="card-body">
                 <h4>Job Description</h4>
-                <p>{{ job.details }}</p>
+                <p>{{ job.description }}</p>
 
-                <h4>Requirements</h4>
+                <!-- <h4>Requirements</h4> -->
                 <ul>
-                    {% for requirement in job.requirements %}
+                    <!-- {% for requirement in job.requirements %}
                     <li>- {{ requirement }}</li>
-                    {% endfor %}
+                    {% endfor %} -->
                 </ul>
 
                 <h4>Additional Information</h4>
@@ -101,7 +101,15 @@
 
         <!-- Apply Section -->
         <div class="apply-section">
-            <a href="{% url 'apply-job' job.pk %}" class="apply-btn">Apply Now</a>
+            <form action="{% url 'apply-job' job.pk %}" method="post">
+                {% csrf_token %}
+                <!-- <a href="{% url 'apply-job' job.pk %}" class="apply-btn">Apply Now</a>
+                 -->
+                 <input type="text" value="{{job.title}}" name="title" hidden>
+                 <!-- <input type="text" value="{{job.description}}" name="title"> -->
+
+                 <button type="submit">Apply Now</button>
+            </form>
         </div>
     </div>
 </div>

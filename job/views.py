@@ -4,109 +4,123 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from core_root_api import api_url
 import requests
+from core_root_api.security.user.models import CompanyProfile
 import datetime
+from core_root_api.job_api.models import ApplicationForm
 import uuid
 import json
+from core_root_api.security.user.models import User
+from core_root_api.job_api.models import ApplicationForm
+from core_root_api.job_api.models import Job
+# jobs = [ 
+#         dict(
+#             pk=str(uuid.uuid4()),
+#             opening=30,
+#             title="software Engineer", 
+#             details="Experienced in Node.Js, Java, Spring, Bootstrap, Python and Selenium integration and Unit Testing",
+#             salary="26K - 30k Monthly",
+#             place='Poland',
+#             time=datetime.date.fromisoformat("2024-04-24").isoformat(),
+#             image_url="jobs/job_1.jpeg",
+#             app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             company_name="Microsoft",
+#             status="rejected"
+#         ),
+#         dict(
+#             pk=str(uuid.uuid4()),
+#             title="mobile App Engineer",
+#             details="Experienced in Flutter or React native for uilding a startup app",
+#             opening=10,
+#             salary="8k - 10K Monthly",
+#             place="USA",
+#             time=datetime.date.fromisoformat("2024-04-24").isoformat(),
+#             image_url="jobs/job_2.jpeg",
+#             app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             company_name="Microsoft",
+#             status="pending"
+#         ),
+#         dict(
+#             pk=str(uuid.uuid4()),
+#             title="mobile App Developer ",
+#             details="Binance is looking for senior mobile app developer with at least 10 years of experience building cross platform application with flutter, firebase and react native. The role is also remote based and also  willing to attend yearly meeting at binance head quarters in your country",
+#             opening=10,
+#             salary="50k - 100K Monthly",
+#             place="USA",
+#             time=datetime.date.fromisoformat("2024-04-24").isoformat(),
+#             image_url="jobs/job_5.jpeg",
+#             app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             company_name="Microsoft",
+#             status="accepted"
+#         ),
+#         dict(
+#             pk=str(uuid.uuid4()),
+#             opening=30,
+#             title="software Engineer", 
+#             details="Experienced in Node.Js, Java, Spring, Bootstrap, Python and Selenium integration and Unit Testing",
+#             salary="26K - 30k Monthly",
+#             place='Poland',
+#             time=datetime.date.fromisoformat("2024-04-24").isoformat(),
+#             image_url="jobs/job_1.jpeg",
+#             app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             company_name="Microsoft"
+#         ),
+#         dict(
+#             pk=str(uuid.uuid4()),
+#             title="mobile App Engineer",
+#             details="Experienced in Flutter or React native for uilding a startup app",
+#             opening=10,
+#             salary="8k - 10K Monthly",
+#             place="USA",
+#             time=datetime.date.fromisoformat("2024-04-24").isoformat(),
+#             image_url="jobs/job_2.jpeg",
+#             app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             company_name="Microsoft"
+#         ),
+#         dict(
+#             pk=str(uuid.uuid4()),
+#             title="mobile App Developer ",
+#             details="Binance is looking for senior mobile app developer with at least 10 years of experience building cross platform application with flutter, firebase and react native. The role is also remote based and also  willing to attend yearly meeting at binance head quarters in your country",
+#             opening=10,
+#             salary="50k - 100K Monthly",
+#             place="USA",
+#             time=datetime.date.fromisoformat("2024-04-24").isoformat(),
+#             image_url="jobs/job_5.jpeg",
+#             app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
+#             company_name="Microsoft"
+#         ),
+#     ]
+list_of_jobs=Job.objects.all()
+jobs=[]
+# title=models.CharField(null=True,blank=True,max_length=1000)
+#     company_name=models.CharField(null=True,blank=True,max_length=1000)
+#     monthly_salary=models.CharField(null=True,blank=True,max_length=100)
+#     description=models.TextField(null=True,blank=True)
+#     location=models.TextField(null=True,blank=True)
+#     no_of_opening=models.IntegerField(null=True,blank=True)
+#     application_starting_date = models.DateTimeField(null=True, blank=True)
+#     application_ending_date = models.DateTimeField(null=True, blank=True)
+for  job in list_of_jobs:
 
-jobs = [ 
-        dict(
-            pk=str(uuid.uuid4()),
-            opening=30,
-            title="software Engineer", 
-            details="Experienced in Node.Js, Java, Spring, Bootstrap, Python and Selenium integration and Unit Testing",
-            salary="26K - 30k Monthly",
-            place='Poland',
-            time=datetime.date.fromisoformat("2024-04-24").isoformat(),
-            image_url="jobs/job_1.jpeg",
-            app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            company_name="Microsoft",
-            status="rejected"
-        ),
-        dict(
-            pk=str(uuid.uuid4()),
-            title="mobile App Engineer",
-            details="Experienced in Flutter or React native for uilding a startup app",
-            opening=10,
-            salary="8k - 10K Monthly",
-            place="USA",
-            time=datetime.date.fromisoformat("2024-04-24").isoformat(),
-            image_url="jobs/job_2.jpeg",
-            app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            company_name="Microsoft",
-            status="pending"
-        ),
-        dict(
-            pk=str(uuid.uuid4()),
-            title="mobile App Developer ",
-            details="Binance is looking for senior mobile app developer with at least 10 years of experience building cross platform application with flutter, firebase and react native. The role is also remote based and also  willing to attend yearly meeting at binance head quarters in your country",
-            opening=10,
-            salary="50k - 100K Monthly",
-            place="USA",
-            time=datetime.date.fromisoformat("2024-04-24").isoformat(),
-            image_url="jobs/job_5.jpeg",
-            app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            company_name="Microsoft",
-            status="accepted"
-        ),
-        dict(
-            pk=str(uuid.uuid4()),
-            opening=30,
-            title="software Engineer", 
-            details="Experienced in Node.Js, Java, Spring, Bootstrap, Python and Selenium integration and Unit Testing",
-            salary="26K - 30k Monthly",
-            place='Poland',
-            time=datetime.date.fromisoformat("2024-04-24").isoformat(),
-            image_url="jobs/job_1.jpeg",
-            app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            company_name="Microsoft"
-        ),
-        dict(
-            pk=str(uuid.uuid4()),
-            title="mobile App Engineer",
-            details="Experienced in Flutter or React native for uilding a startup app",
-            opening=10,
-            salary="8k - 10K Monthly",
-            place="USA",
-            time=datetime.date.fromisoformat("2024-04-24").isoformat(),
-            image_url="jobs/job_2.jpeg",
-            app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            company_name="Microsoft"
-        ),
-        dict(
-            pk=str(uuid.uuid4()),
-            title="mobile App Developer ",
-            details="Binance is looking for senior mobile app developer with at least 10 years of experience building cross platform application with flutter, firebase and react native. The role is also remote based and also  willing to attend yearly meeting at binance head quarters in your country",
-            opening=10,
-            salary="50k - 100K Monthly",
-            place="USA",
-            time=datetime.date.fromisoformat("2024-04-24").isoformat(),
-            image_url="jobs/job_5.jpeg",
-            app_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            last_date=datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S"),
-            company_name="Microsoft"
-        ),
-    ]
-jobs.append(
-    {
-        "pk": str(uuid.uuid4()),
-        "title": "Software Developer",
-        "company_name": "XYZ Corp",
-        "place": "Remote",
-        "app_date": "2024-12-01",
-        "details": "We are looking for a skilled software developer to join our team...",
-        "requirements": [
-            "Proficiency in Python and Django",
-            "Experience with REST APIs",
-            "Knowledge of front-end technologies (HTML, CSS, JavaScript)"
-        ],
-        "additional_info": "Flexible work hours and remote-friendly environment."
-    }
-)
+    jobs.append(
+        {
+            "pk": str(job.pk),
+            "title": job.title,
+            "company_name": job.company_name,
+            "place": job.location,
+            "monthly_salary":job.monthly_salary,
+            "no_of_opening":job.no_of_opening,
+            "application_starting_date":job.application_starting_date,
+            "application_ending_date":job.application_ending_date,
+            "description":job.description,
+            "job_thumbnail":job.job_thumbnail
+        }
+    )
 
 def landing_page(request):
     return render(request, "landing_page.html")
@@ -153,10 +167,51 @@ def student_signup(request):
     return render(request, "auth/student_signup.html")
 
 def admin_login(request):
-    
+    if request.method=='POST':
+   
+        login_data={"email":request.POST['email'],"password":request.POST['password']}
+        response=requests.post(f"{api_url.base_url}/login/",json=login_data)
+
+        if response.json()['status']==True:
+            response_data=response.json()
+            request.session['access_token'] = response_data['data']['access']
+            request.session['user_id'] = response_data['data']['user']['id']
+            request.session['full_name']=response_data['data']['user']['full_name']
+            
+            company=CompanyProfile.objects.get(user__public_id=str(response_data['data']['user']['id']))
+            request.session['company_name']=company.company_name
+            return redirect('companydashboard')
+        else:
+            return redirect('adminsignup')
     return render(request, "auth/company_login.html")
 
 def admin_signup(request):
+    if request.method=='POST':
+    #      "id": "8fd354acae80425db147021537b75a01",
+    # "email": "user@example.com",
+    # "gender": "Male",
+    # "full_name": "Eze Kc",
+    # "password": "pbkdf2_sha256$600000$OkFHzcR0NhzqANQBePh4pb$RI4TgTN3LnWbOyA3kUEHpLXbnYveEPc9htIV6zuuCbk=",
+    # "phone_number": "0808219999",
+    # "student_id": "2019/24355555"
+#     {
+#   "email": "user@example.com",
+#   "full_name": "Ephraim",
+#   "password": "Jude1999",
+#   "confirm_password": "Jude1999",
+#   "company_phone_number": "+1999999999999",
+#   "company_name": "Google",
+#   "company_address": "Usa",
+#   "company_url": "https://google.com"
+# }
+        signup_data={"email":request.POST['email'],"full_name":request.POST['full_name'],"password":request.POST['password'],'confirm_password':request.POST['confirm_password'],'company_phone_number':request.POST['company_phone_number'],'company_name':request.POST['company_name'],'company_address':request.POST['company_address'],'company_url':request.POST['company_url']}
+        response=requests.post(f"{api_url.base_url}/admin-board/register/",json=signup_data)
+
+        if response.json()['status']==True:
+            return redirect('adminlogin')
+
+        else:
+            return redirect('adminsignup')
     return render(request, 'auth/company_signup.html')
 
 def job_list_post(request):
@@ -197,10 +252,28 @@ def admin_profile(request):
 """
 
 def student_dashboard(request):
+    user_id = request.session.get('user_id')
+    try:
+        user=User.objects.get(public_id=str(user_id).replace("-",""))
+        name=user.full_name
+    except Exception as e:
+        del request.session['access_token']  # Clear the session
+        return redirect('student_login') 
+    active_jobs=ApplicationForm.objects.all().filter(user__public_id=str(user_id).replace("-",""))
+# full_name=models.TextField(null=True,blank=True)
+#     email=models.EmailField(null=True,blank=True)
+#     phone_number=models.CharField(max_length=15,null=True,blank=True)
+#     cover_letter=models.TextField(null=True,blank=True)
+#     resume=models.FileField(upload_to='photos',null=True,blank=True)
+    list_of_jobs=[]
+    for job_applied in active_jobs:
+        job_data={"full_name":job_applied.full_name,"email":job_applied.email,"phone_number":job_applied.phone_number,"cover_letter":job_applied.cover_letter,}
+        list_of_jobs.append(job_data)
     context= {
-        "applied_jobs": json.dumps(jobs),
-        "recommended_jobs": json.dumps(jobs),
-        "saved_jobs": json.dumps(jobs)
+        "name":name,
+        "applied_jobs": json.dumps(list_of_jobs),
+        "recommended_jobs": json.dumps(list_of_jobs),
+        "saved_jobs": json.dumps(list_of_jobs)
     }
     return render(request, "dashboard/student_dashboard.html", context)
 
@@ -213,9 +286,37 @@ def applied_job(request, job_id):
     return render(request, "dashboard/student/applied_job.html", content)
 
 def detailed_saved_job(request, job_id):
-    if not (single := [i for i in jobs if i['pk'] == job_id]):
-        return redirect('index')
-    single = single[0]
+
+    global jobs  # Remove this if jobs is fetched within the function
+
+    # Check the HTTP method
+    if request.method == 'POST':
+        if 'title' in request.POST:
+            print(f"POST Title: {request.POST['title']}")
+        else:
+            print("POST request made but no 'title' found in the request data.")
+        return redirect('index')  # Redirect to index or handle POST differently if needed
+    
+    # Handle GET request
+    single = next((job for job in jobs if job.get('pk') == job_id), None)
+    
+    if not single:
+        print(f"No job found with ID: {job_id}")
+        return redirect('index')  # Redirect if job not found
+
+    # Log the job details for debugging
+    print(f"Job found: {single}")
+
+    # Save job details in the session for use across views
+    request.session['job_title'] = single.get('title', 'Unknown Title')
+    request.session['job_description'] = single.get('description', 'No Description Available')
+
+    # Make job details available in the view directly (for debugging or further logic)
+    job_title = single.get('title', 'Unknown Title')
+    job_description = single.get('description', 'No Description Available')
+
+    # Log session data
+    print(f"Session data saved - Title: {job_title}, Description: {job_description}")
     return render(request, 'dashboard/student/detailed_saved_job.html', {"job": single})
 
 """
@@ -223,6 +324,14 @@ def detailed_saved_job(request, job_id):
 """
 
 def apply_job(request, job_id):
+    if request.method == 'POST':
+        if 'title' in request.POST:
+            job_title=f"{request.POST['title']}"
+            request.session['job_title']=job_title
+            # print(job_title)
+        else:
+            print("POST request made but no 'title' found in the request data.")
+        # return redirect('index')  
     return render(request, "job/applied_job.html")
 
 
@@ -231,7 +340,8 @@ def successful_submission(request, job_id):
     if request.method == 'POST':
         access_token = request.session.get('access_token')
         # print(access_token)
-        
+        job_title=request.session.get('job_title')
+        print(job_title)
         # Retrieve form data
         full_name = request.POST['full_name']
         email = request.POST['email']
@@ -247,6 +357,7 @@ def successful_submission(request, job_id):
             'email': email,
             'phone_number': phone_number,
             'cover_letter': cover_letter,
+            'job_title':job_title
             # Note: 'resume' will be handled separately as a file upload
         }
         
@@ -295,9 +406,69 @@ def withdraw_application(request, job_id):
     START OF THE COMPANY ADMIN SECTION
 """
 def company_dashboard(request):
-    return render(request, "dashboard/company_dashboard.html", {'jobs':jobs})
+    total_jobs=Job.objects.count()
+    # current_jobs=jobs.filte
+    total_applicants_count=ApplicationForm.objects.count()
+    try:
+        company_name=request.session.get("company_name")
+    except Exception as e:
+        return redirect('adminlogin')
+    return render(request, "dashboard/company_dashboard.html", {'jobs':jobs,'total_applicants_count':total_applicants_count,'total_jobs':total_jobs,"full_name":request.session.get("full_name"),"company_name":company_name})
 
 def post_job(request, job_id=None):
+
+    try:
+        company_name=request.session.get("company_name")
+    except Exception as e:
+        return redirect("adminlogin")
+    if request.method == 'POST':
+        access_token = request.session.get('access_token')
+        # print(access_token)
+        job_title=request.session.get('job_title')
+        print(job_title)
+        # Retrieve form data
+        title = request.POST['title']
+        company_name=company_name
+        monthly_salary = request.POST['monthly_salary']
+        location=request.POST['location']
+        no_of_opening=request.POST['no_of_opening']
+        
+        description = request.POST['description']
+        
+        # Access the uploaded resume file
+        resume = request.FILES['resume']
+        
+        # Prepare application data
+        application_data = {
+            'full_name': full_name,
+            'email': email,
+            'phone_number': phone_number,
+            'cover_letter': cover_letter,
+            'job_title':job_title
+            # Note: 'resume' will be handled separately as a file upload
+        }
+        
+        headers = {"Authorization": f"Bearer {access_token}"}
+        
+        # Send application data along with the resume file
+        response = requests.post(
+            f"{api_url.base_url}/job/apply/",
+            data=application_data,  # Use 'data' for non-file fields
+            files={'resume': resume},  # Use 'files' for the resume upload
+            headers=headers
+        )
+        
+        print(response.json())
+        
+        if response.json().get('status') == True:
+            # print("good")
+            context=response.json()['data']
+            print(context)
+            return render(request, "job/successful_submission.html",context=context)
+        else:
+            
+            del request.session['access_token']  # Clear the session
+            return redirect('student_login')  
     if job_id:
         if not (single := [i for i in jobs if i['pk'] == job_id]):
             return redirect('index')
@@ -316,10 +487,12 @@ def post_job(request, job_id=None):
     return render(request, 'dashboard/company/job_management.html', context)
 
 def job_applications(request, job_id=None):
+    applicants=ApplicationForm.objects.all()
     # if not (single := [i for i in jobs if i['pk'] == job_id]):
     #     return redirect('index')
     # job = single[0]
     # context = {
     #     'job': job,
     # }
-    return render(request, 'dashboard/company/job_applications.html', )
+
+    return render(request, 'dashboard/company/job_applications.html', {"applicants":applicants})

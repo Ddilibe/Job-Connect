@@ -49,6 +49,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     student_id = models.CharField(max_length=20, null=True, blank=True)
     gender=models.CharField(max_length=20,null=True,blank=True)
     face_encoding = models.BinaryField(blank=True, null=True)
+    company_name=models.TextField(blank=True,null=True)
+    company_address=models.TextField(blank=True,null=True)
+    company_phone_number=models.TextField(blank=True,null=True)
+    company_url=models.TextField(blank=True,null=True)
+
+
     
     # Override groups and user_permissions fields
     # groups = models.ManyToManyField(
@@ -82,3 +88,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def name(self):
         return f"{self.full_name}"
+
+
+class CompanyProfile(models.Model):
+    company_phone_number=models.TextField(null=True,blank=True)
+    company_name=models.TextField(null=True,blank=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    address=models.TextField(null=True,blank=True)
+    company_url=models.TextField(null=True,blank=True)

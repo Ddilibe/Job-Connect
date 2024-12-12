@@ -89,7 +89,7 @@
     <div class="container">
         <!-- Dashboard Header -->
         <div class="dashboard-header">
-            <h1>Welcome, {{ company.name }}</h1>
+            <h1>Welcome, {{ full_name }}  to {{company_name}} Dashboard</h1>
             <p>Your job listings and activity overview are displayed below.</p>
         </div>
 
@@ -98,7 +98,7 @@
             <!-- Active Jobs Card -->
             <div class="summary-card">
                 <h4>Active Jobs</h4>
-                <p>{{ active_jobs_count }}</p>
+                <p>{{ total_jobs }}</p>
             </div>
 
             <!-- Recent Applications Card -->
@@ -125,17 +125,20 @@
                     <div class="card-body">
                         <h5 class="job-title">{{ job.title }}</h5>
                         <p><strong>Status:</strong> {{ job.status }}</p>
-                        <p><strong>Location:</strong> {{ job.location }}</p>
-                        <p><strong>Posted on:</strong> {{ job.created_at }}</p>
+                        <p><strong>Location:</strong> {{ job.place }}</p>
+                        <p><strong>Company:</strong> {{ job.company_name }}</p>
+                        <p><strong>Posted on:</strong> {{ job.application_starting_date }}</p>
                         <a href="{% url 'singlejob' job.pk %}" class="btn btn-primary">View Job</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
-            <p><a href="{% url 'postjob' %}">Post a new job</a></p>
+            <p><a href="{% url 'adminsignup' %}">Login to Post a new Job</a></p>
+            <p><a href="{% url 'postjob' %}">Already Logged as an Admin? Continue with Job Posting</a></p>
+
         </div>
         {% else %}
-        <p>No active job listings. <a href="{% url 'postjob' %}">Post a new job</a></p>
+        <p>No active job listings. <a href="{% url 'adminsignup' %}">Post a new job</a></p>
         {% endif %}
 
         <!-- Analytics Overview Section -->
