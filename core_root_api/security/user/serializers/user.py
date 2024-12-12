@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields=['id','username','email','full_name','student_id','gender','phone_number','is_active','created','updated']
+        fields=['id','username','email','full_name','student_id','gender','phone_number','is_active','created','updated','profile_image']
         read_only_field=['is_active']   
 
 class ChangePasswordSerializer(serializers.ModelSerializer):

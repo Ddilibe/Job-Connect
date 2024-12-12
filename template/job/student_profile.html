@@ -17,21 +17,21 @@
         <form method="post">
             <div class="row">
                 <div class="col-md-4">
-                    <img src="student_image.jpg" class="img-fluid rounded-circle mb-3" alt="Student Profile Picture">
-                    <input type="file" class="form-control-file" id="profilePicture">
+                    <img src="{{profile_image}}" class="img-fluid rounded-circle mb-3" alt="Student Profile Picture">
+                    <input type="file" class="form-control-file" id="profilePicture" >
                 </div>
                 <div class="col-md-8">
                     <div class="mb-3">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="Enter First Name">
+                        <label for="firstName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" value="{{full_name}}">
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="lastName" class="form-label">Last Name</label>
                         <input type="text" class="form-control" id="lastName" placeholder="Enter Last Name">
-                    </div>
+                    </div> -->
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter Email Address">
+                        <input type="email" class="form-control" id="email" placeholder="Enter Email Address" value="{{email}}">
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                     </div>
                     <div class="col-9">
                         <input type="number" class="form-control" id="exampleFormControlInput1"
-                            placeholder="+5432222111111">
+                            placeholder="+5432222111111" value="{{phone_number}}">
                     </div>
                 </div>
                 <div class="my-4 d-flex row">

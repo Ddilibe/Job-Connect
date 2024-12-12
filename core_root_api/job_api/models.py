@@ -10,9 +10,10 @@ class Job(models.Model):
     description=models.TextField(null=True,blank=True)
     location=models.TextField(null=True,blank=True)
     no_of_opening=models.IntegerField(null=True,blank=True)
-    application_starting_date = models.DateTimeField(null=True, blank=True)
-    application_ending_date = models.DateTimeField(null=True, blank=True)
+    application_starting_date = models.DateField(null=True, blank=True)
+    application_ending_date = models.DateField(null=True, blank=True)
     active=models.BooleanField(default=True,null=True,blank=True)
+    job_requirements=models.TextField(null=True,blank=True)
     job_thumbnail=models.FileField(upload_to='photos',null=True,blank=True)
 
 
@@ -30,7 +31,7 @@ class ApplicationForm(models.Model):
     cover_letter=models.TextField(null=True,blank=True)
     resume=models.FileField(upload_to='photos',null=True,blank=True)
     job=models.ForeignKey(Job,on_delete=models.CASCADE,null=True,blank=True)
-    application_date=models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    application_date=models.DateField(auto_now_add=True,null=True,blank=True)
     job_status=models.TextField(null=True,blank=True,default="under_review")
 
     

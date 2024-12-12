@@ -118,7 +118,8 @@ for  job in list_of_jobs:
             "application_starting_date":job.application_starting_date,
             "application_ending_date":job.application_ending_date,
             "description":job.description,
-            "job_thumbnail":job.job_thumbnail
+            "job_thumbnail":job.job_thumbnail,
+            "job_requirements":job.job_requirements
         }
     )
 
@@ -241,8 +242,13 @@ def company_profile(request):
     return render(request, "job/company_profile.html")
 
 def student_profile(request):
-
-    return render(request, "job/student_profile.html")
+    try:
+        user_id=request.session.get('user_id')
+        response=requests.get(f"{api_url.base_url}/user/{user_id}")
+        print(response.json())
+    except Exception as e:
+        pass
+    return render(request, "job/student_profile.html",response.json())
 
 def admin_profile(request):
     return render(request, "job/admin_profile.html")
@@ -252,9 +258,11 @@ def admin_profile(request):
 """
 
 def student_dashboard(request):
-    user_id = request.session.get('user_id')
     try:
+        user_id = request.session.get('user_id')
+
         user=User.objects.get(public_id=str(user_id).replace("-",""))
+        
         name=user.full_name
     except Exception as e:
         del request.session['access_token']  # Clear the session
@@ -269,9 +277,11 @@ def student_dashboard(request):
     for job_applied in active_jobs:
         job_data={"full_name":job_applied.full_name,"email":job_applied.email,"phone_number":job_applied.phone_number,"cover_letter":job_applied.cover_letter,}
         list_of_jobs.append(job_data)
+    print(list_of_jobs)
     context= {
         "name":name,
-        "applied_jobs": json.dumps(list_of_jobs),
+        
+        "applied_jobs": list_of_jobs,
         "recommended_jobs": json.dumps(list_of_jobs),
         "saved_jobs": json.dumps(list_of_jobs)
     }
@@ -406,13 +416,44 @@ def withdraw_application(request, job_id):
     START OF THE COMPANY ADMIN SECTION
 """
 def company_dashboard(request):
-    total_jobs=Job.objects.count()
-    # current_jobs=jobs.filte
-    total_applicants_count=ApplicationForm.objects.count()
+
     try:
         company_name=request.session.get("company_name")
+        user=CompanyProfile.objects.get(user__public_id=str(request.session.get('user_id')))
     except Exception as e:
         return redirect('adminlogin')
+    list_of_jobs=Job.objects.all().filter(company_name=company_name)
+    jobs=[]
+    # title=models.CharField(null=True,blank=True,max_length=1000)
+    #     company_name=models.CharField(null=True,blank=True,max_length=1000)
+    #     monthly_salary=models.CharField(null=True,blank=True,max_length=100)
+    #     description=models.TextField(null=True,blank=True)
+    #     location=models.TextField(null=True,blank=True)
+    #     no_of_opening=models.IntegerField(null=True,blank=True)
+    #     application_starting_date = models.DateTimeField(null=True, blank=True)
+    #     application_ending_date = models.DateTimeField(null=True, blank=True)
+    for  job in list_of_jobs:
+
+        jobs.append(
+            {
+                "pk": str(job.pk),
+                "title": job.title,
+                "company_name": job.company_name,
+                "place": job.location,
+                "monthly_salary":job.monthly_salary,
+                "no_of_opening":job.no_of_opening,
+                "application_starting_date":job.application_starting_date,
+                "application_ending_date":job.application_ending_date,
+                "description":job.description,
+                "job_thumbnail":job.job_thumbnail,
+                "job_requirements":job.job_requirements
+            }
+        )
+
+    total_jobs=Job.objects.filter(company_name=company_name).count()
+    # current_jobs=jobs.filte
+    total_applicants_count=ApplicationForm.objects.filter(job__company_name=company_name).count()
+    
     return render(request, "dashboard/company_dashboard.html", {'jobs':jobs,'total_applicants_count':total_applicants_count,'total_jobs':total_jobs,"full_name":request.session.get("full_name"),"company_name":company_name})
 
 def post_job(request, job_id=None):
@@ -422,72 +463,92 @@ def post_job(request, job_id=None):
     except Exception as e:
         return redirect("adminlogin")
     if request.method == 'POST':
+    #      title=models.CharField(null=True,blank=True,max_length=1000)
+    # company_name=models.CharField(null=True,blank=True,max_length=1000)
+    # monthly_salary=models.CharField(null=True,blank=True,max_length=100)
+    # description=models.TextField(null=True,blank=True)
+    # location=models.TextField(null=True,blank=True)
+    # no_of_opening=models.IntegerField(null=True,blank=True)
+    # application_starting_date = models.DateField(null=True, blank=True)
+    # application_ending_date = models.DateField(null=True, blank=True)
+    # active=models.BooleanField(default=True,null=True,blank=True)
+    # job_thumbnail=models.FileField(upload_to='photos',null=True,blank=True)
+
         access_token = request.session.get('access_token')
         # print(access_token)
-        job_title=request.session.get('job_title')
-        print(job_title)
+        
         # Retrieve form data
         title = request.POST['title']
         company_name=company_name
         monthly_salary = request.POST['monthly_salary']
+        description = request.POST['description']
         location=request.POST['location']
         no_of_opening=request.POST['no_of_opening']
         
-        description = request.POST['description']
+        application_starting_date = request.POST['application_starting_date']
+        application_ending_date = request.POST['application_ending_date']
+        job_requirements=request.POST['job_requirements']
         
         # Access the uploaded resume file
-        resume = request.FILES['resume']
+        job_thumbnail = request.FILES['job_thumbnail']
         
         # Prepare application data
         application_data = {
-            'full_name': full_name,
-            'email': email,
-            'phone_number': phone_number,
-            'cover_letter': cover_letter,
-            'job_title':job_title
+            'title': title,
+            'company_name': company_name,
+            'monthly_salary': monthly_salary,
+            'description': description,
+            'location':location,
+            'no_of_opening':no_of_opening,
+            'application_starting_date':application_starting_date,
+            'application_ending_date':application_ending_date,
+            'job_requirements':job_requirements,
+            'active':True,
             # Note: 'resume' will be handled separately as a file upload
         }
-        
+        print(application_data)
         headers = {"Authorization": f"Bearer {access_token}"}
         
         # Send application data along with the resume file
         response = requests.post(
-            f"{api_url.base_url}/job/apply/",
+            f"{api_url.base_url}/job/job-post/",
             data=application_data,  # Use 'data' for non-file fields
-            files={'resume': resume},  # Use 'files' for the resume upload
+            files={'job_thumbnail': job_thumbnail},  # Use 'files' for the resume upload
             headers=headers
         )
         
         print(response.json())
         
         if response.json().get('status') == True:
+            return redirect('companydashboard')
             # print("good")
-            context=response.json()['data']
-            print(context)
-            return render(request, "job/successful_submission.html",context=context)
-        else:
-            
-            del request.session['access_token']  # Clear the session
-            return redirect('student_login')  
-    if job_id:
-        if not (single := [i for i in jobs if i['pk'] == job_id]):
-            return redirect('index')
-        job = single[0]
-        form_title = "Edit Job Post"
-    else:
-        job = None
-        form_title = "Create Job Post"
+            # context=response.json()['data']
+            # print(context)
+            # return render(request, "job/successful_submission.html",context=context)
+        
+    # if job_id:
+    #     if not (single := [i for i in jobs if i['pk'] == job_id]):
+    #         return redirect('index')
+    #     job = single[0]
+    #     form_title = "Edit Job Post"
+    # else:
+    #     job = None
+    #     form_title = "Create Job Post"
     
-    if request.method == 'POST':
-        return redirect('job-list')
-    context = {
-        'form_title': form_title,
-        'job': job
-    }
-    return render(request, 'dashboard/company/job_management.html', context)
+    # if request.method == 'POST':
+    #     return redirect('joblistpost')
+    # context = {
+    #     'form_title': form_title,
+    #     'job': job
+    # }
+    return render(request, 'dashboard/company/job_management.html')
 
 def job_applications(request, job_id=None):
-    applicants=ApplicationForm.objects.all()
+    try:
+        company_name=request.session.get("company_name")
+    except Exception as e:
+        return redirect("adminlogin")
+    applicants=ApplicationForm.objects.all().filter(job__company_name=company_name)
     # if not (single := [i for i in jobs if i['pk'] == job_id]):
     #     return redirect('index')
     # job = single[0]
