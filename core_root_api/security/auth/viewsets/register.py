@@ -22,7 +22,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from core_root_api.security.auth.serializer.register import AdminRegisterSerializer
+from core_root_api.security.auth.serializer.register import AdminRegisterSerializer,RegisterSerializer
 # from email_msg_generator.models import OpenAiAdminModel,OpenAiUserModel
 # from services.aichat.models im# The commented out lines in the code are likely imports that are not
 # currently being used in the codebase. These lines are usually kept
@@ -39,7 +39,7 @@ from core_root_api.security.auth.serializer.verify_serializer import VerifySeria
 )
 
 class RegisterViewSet(viewsets.ModelViewSet):
-    serializer_class = AdminRegisterSerializer
+    serializer_class = RegisterSerializer
     
     permission_classes = (AllowAny,)
     http_method_names = ['post']
@@ -74,8 +74,8 @@ class RegisterViewSet(viewsets.ModelViewSet):
                 error_list['password_error']='Password should be at least 8 characters'
 
             
-            if User.objects.filter(username=username).exists():
-                error_list['username_error']='username exist'
+            # if User.objects.filter(username=username).exists():
+            #     error_list['username_error']='username exist'
             # if str(serializer.initial_data['confirm_password'])!=str(serializer.initial_data['password']):
                 # error_list['password_mismatch_error']='Password mismatch for confirm password'
             if str(serializer.initial_data['password'])!=str(serializer.initial_data['confirm_password']):

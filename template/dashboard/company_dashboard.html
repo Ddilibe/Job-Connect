@@ -134,11 +134,12 @@
             </div>
             {% endfor %}
             <p><a href="{% url 'adminsignup' %}">Login to Post a new Job</a></p>
-            <p><a href="{% url 'postjob' %}">Already Logged as an Admin? Continue with Job Posting</a></p>
 
         </div>
         {% else %}
         <p>No active job listings. <a href="{% url 'adminsignup' %}">Post a new job</a></p>
+        <p><a href="{% url 'postjob' %}">Already Logged as an Admin? Continue with Job Posting</a></p>
+
         {% endif %}
 
         <!-- Analytics Overview Section -->
