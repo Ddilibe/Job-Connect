@@ -34,5 +34,6 @@ urlpatterns = [
     path('job/create/', job.post_job, name='postjob'),
     path('job/edit/<int:job_id>/', job.post_job, name='edit-job'),
     path("job/applications/", job.job_applications, name="jobapplications"),
+    path('download-cv/<str:filename>/', job.download_cv, name='download_cv'),
 ]
 

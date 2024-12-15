@@ -133,6 +133,11 @@
                     <td>{{applicant.email}}</td>
                 <td>{{applicant.application_date}}</td>
                     <td><button class="status-btn reviewed">{{applicant.job_status}}</button></td>
+                    <td>
+                        <td>
+                            <a href="{{ applicant.resume.url }}" class="btn btn-primary status-btn reviewed">Download CV</a>
+                        </td>
+</td>
                     <td><button class="btn btn-info btn-sm"
                             onclick="viewApplicantProfile('John Doe', 'johndoe@example.com', 'Resume Link')">View
                             Profile</button></td>
